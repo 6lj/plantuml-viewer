@@ -1,89 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PlantUML Viewer</title>
-    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="particles" id="particles"></div>
-    <div class="container">
-        <header class="header">
-            <h1 class="main-title">PlantUML Viewer</h1>
-            <p class="subtitle">A web application that introduces a new algorithm for displaying UML diagrams using PlantUML.</p>
-            <a href="https://github.com/6lj/plantuml-viewer" class="github-link" target="_blank" rel="noopener noreferrer" aria-label="View PlantUML Viewer on GitHub">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="github-icon">
-                    <path d="M12 0C5.373 0 0 5.373 0 12C0 17.302 3.438 21.8 8.207 23.387C8.806 23.498 9 23.126 9 22.81V20.576C5.662 21.302 4.967 19.16 4.967 19.16C4.421 17.773 3.634 17.404 3.634 17.404C2.545 16.659 3.706 16.687 3.706 16.687C4.894 16.77 5.515 17.925 5.515 17.925C6.565 19.792 8.389 19.251 9.058 18.977C9.167 18.183 9.465 17.592 9.797 17.219C7.231 16.839 4.543 15.771 4.543 11.337C4.543 10.082 4.987 9.047 5.718 8.242C5.594 7.867 5.207 6.664 5.878 4.973C5.878 4.973 6.867 4.58 8.966 6.088C9.893 5.832 10.937 5.704 12 5.7C13.063 5.704 14.107 5.832 15.034 6.088C17.133 4.58 18.122 4.973 18.122 4.973C18.793 6.664 18.406 7.867 18.282 8.242C19.013 9.047 19.457 10.082 19.457 11.337C19.457 15.785 16.759 16.835 14.187 17.211C14.577 17.639 14.879 18.464 14.879 19.656V22.81C14.879 23.129 15.074 23.503 15.677 23.387C20.438 21.8 23.879 17.302 23.879 12C23.879 5.373 18.506 0 12 0Z" fill="var(--text-primary)" />
-                </svg>
-            </a>
-        </header>
-        <main class="main-grid">
-            <section class="glass-card">
-                <h2 class="sr-only">Diagram Input</h2>
-                <div class="form-group">
-                    <textarea id="plantumlInput" class="form-input" rows="15" placeholder="Enter your PlantUML code here...">@startuml
+    <textarea id="plantumlInput" rows="10" cols="50">
+@startuml
 Alice -> Bob: Hello
 Bob --> Alice: Hi back!
-@enduml</textarea>
-                </div>
-                <button onclick="renderDiagram()" class="submit-btn">Render Diagram</button>
-            </section>
-            <section class="glass-card">
-                <h2 class="sr-only">Diagram Output</h2>
-                <div id="output"></div>
-            </section>
-        </main>
-    </div>
-    <div class="scroll-indicator" id="scrollIndicator"></div>
-
+@enduml
+    </textarea>
+    <br>
+    <button onclick="renderDiagram()">Render Diagram</button>
+    <div id="output"></div>
     <script>
-
-        function createParticles() {
-            const particlesContainer = document.getElementById('particles');
-            for (let i = 0; i < 20; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.width = `${Math.random() * 4 + 2}px`;
-                particle.style.height = particle.style.width;
-                particle.style.left = `${Math.random() * 100}%`;
-                particle.style.top = `${Math.random() * 100}%`;
-                particle.style.animationDelay = `${Math.random() * 6}s`;
-                particlesContainer.appendChild(particle);
-            }
-        }
-
-        function updateScrollIndicator() {
-            const scrollIndicator = document.getElementById('scrollIndicator');
-            const scrollPercentage = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
-            scrollIndicator.style.transform = `scaleX(${scrollPercentage})`;
-        }
-
         async function renderDiagram() {
             const plantuml = document.getElementById('plantumlInput').value;
-            try {
-                const response = await fetch('/render', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ plantuml })
-                });
-                const data = await response.json();
-                const output = document.getElementById('output');
-                if (data.error) {
-                    output.innerHTML = `<p style="color: var(--primary-red);">Error: ${data.error}</p>`;
-                } else {
-                    output.innerHTML = `<img src="data:image/png;base64,${data.image}" style="max-width: 100%; border-radius: 8px;" />`;
-                }
-            } catch (error) {
-                document.getElementById('output').innerHTML = `<p style="color: var(--primary-red);">Network Error: ${error.message}</p>`;
+            const response = await fetch('/render', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ plantuml })
+            });
+            const data = await response.json();
+            if (data.error) {
+                alert('Error: ' + data.error);
+            } else {
+                document.getElementById('output').innerHTML = `<img src="data:image/png;base64,${data.image}" />`;
             }
         }
-
-        window.addEventListener('load', () => {
-            createParticles();
-            updateScrollIndicator();
-        });
-        window.addEventListener('scroll', updateScrollIndicator);
     </script>
 </body>
 </html>
