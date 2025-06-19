@@ -1,6 +1,6 @@
 /*
 PlantUML Viewer Backend
-Copyright (C) 2025 Your Name
+Copyright (C) 2025 ENDUP - Mohmmad Hissyn Aon
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -12,9 +12,6 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 const express = require('express');
@@ -24,7 +21,6 @@ const path = require('path');
 const app = express();
 const port = 3000;
 
-// Enable CORS
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
@@ -32,10 +28,10 @@ app.use((req, res, next) => {
     next();
 });
 
-// Serve static files from the project directory
+
 app.use(express.static(__dirname));
 
-// Serve plantuml_viewer.html at root
+
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'plantuml_viewer.html'));
 });
@@ -50,12 +46,12 @@ app.post('/render', async (req, res) => {
     }
 
     try {
-        // Write PlantUML code to a temporary file
+      
         const tempInputFile = path.join(__dirname, 'temp.puml');
         const tempOutputFile = path.join(__dirname, 'temp.png');
         await fs.writeFile(tempInputFile, plantuml);
 
-        // Execute PlantUML JAR to generate PNG
+     
         const command = `java -jar plantuml-gplv2-1.2025.3.jar -tpng ${tempInputFile} -o ${__dirname}`;
         await new Promise((resolve, reject) => {
             exec(command, (error, stdout, stderr) => {
@@ -68,15 +64,14 @@ app.post('/render', async (req, res) => {
             });
         });
 
-        // Read the generated PNG and convert to base64
+   
         const imageBuffer = await fs.readFile(tempOutputFile);
         const imageBase64 = imageBuffer.toString('base64');
 
-        // Clean up temporary files
         await fs.unlink(tempInputFile);
         await fs.unlink(tempOutputFile);
 
-        // Send the base64 image to the frontend
+     
         res.json({ image: imageBase64 });
     } catch (error) {
         res.status(500).json({ error: error.message });
