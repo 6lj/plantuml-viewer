@@ -20,6 +20,6 @@ A web application that introduces a **new algorithm for displaying UML diagrams*
    node server.js
    ```
    Make Sure Path No space Like \Downloads\plantuml-viewer-1.0.0 OK
-   if path have any Space will work like C:\Users\Zord\Downloads\New folder (103) Not Work
+   if path have any Space will not work like C:\Users\Zord\Downloads\New folder (103) Not Work
 2. Open your browser and navigate to `http://localhost:3000`.
 
