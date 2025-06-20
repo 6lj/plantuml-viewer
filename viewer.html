@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlantUML Viewer</title>
+    <link rel="stylesheet" href="https://q5.qa/styles2.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="main-title">PlantUML Viewer</h1>
+            <p class="subtitle">A web application that introduces a new algorithm for displaying UML diagrams using PlantUML.</p>
+        </header>
+        <main class="main-grid">
+            <section class="glass-card">
+                <h2 class="sr-only">Diagram Output</h2>
+                <div id="output">Show your UML</div>
+                <button id="downloadBtn" class="download-btn" disabled>Download Diagram</button>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        async function renderDiagram(plantuml) {
+            const output = document.getElementById('output');
+            const downloadBtn = document.getElementById('downloadBtn');
+            output.innerHTML = 'Show your UML'; 
+            downloadBtn.disabled = true; 
+
+            try {
+                const response = await fetch('/render', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ plantuml })
+                });
+                const data = await response.json();
+                if (data.error) {
+                    output.innerHTML = `<p style="color: var(--primary-red);">Error: ${data.error}</p>`;
+                    downloadBtn.disabled = true;
+                } else {
+                    output.innerHTML = `<img src="data:image/png;base64,${data.image}" alt="UML Diagram" />`;
+                    downloadBtn.disabled = false; 
+                    downloadBtn.onclick = () => {
+                        const img = output.querySelector('img');
+                        if (img) {
+                            const link = document.createElement('a');
+                            link.href = img.src;
+                            link.download = 'uml-diagram.png';
+                            link.click();
+                        }
+                    };
+                }
+            } catch (error) {
+                output.innerHTML = `<p style="color: var(--primary-red);">Network Error: ${error.message}</p>`;
+                downloadBtn.disabled = true;
+            }
+        }
+
+        window.addEventListener('load', () => {
+            const params = new URLSearchParams(window.location.search);
+            const code = params.get('code');
+            if (code) {
+                renderDiagram(decodeURIComponent(code)); 
+            } else {
+                document.getElementById('output').innerHTML = '<p>No UML code provided</p>';
+                document.getElementById('downloadBtn').disabled = true;
+            }
+        });
+    </script>
+</body>
+</html>
