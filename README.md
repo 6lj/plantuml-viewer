@@ -29,16 +29,8 @@ A web application that introduces a **new algorithm for displaying UML diagrams*
      ```
  
 
-3. **Verify PlantUML JAR**
-   - Ensure `plantuml-gplv2-1.2025.3.jar` is in the project directory (`C:\Users\Zord\plantuml-viewer`).
-   - Test the JAR:
-     ```bash
-     java -jar plantuml-gplv2-1.2025.3.jar -version
-     ```
-     - Expected output: `PlantUML version 1.2025.3`
-     - If the JAR is missing or corrupted, download it from [PlantUML](https://plantuml.com/en/download).
 
-4. **Start the Server**
+3. **Start the Server**
    - Run the server:
      ```bash
      node server.js
@@ -46,7 +38,7 @@ A web application that introduces a **new algorithm for displaying UML diagrams*
     
    - The server will run at `http://localhost:3000`.
 
-5. **Access the Application**
+4. **Access the Application**
    - Open a browser and navigate to `http://localhost:3000`.
    - Enter PlantUML code (e.g., the sample below) in the text area and click "Render Diagram":
      ```plantuml
