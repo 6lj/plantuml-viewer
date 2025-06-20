@@ -47,7 +47,7 @@ A web application that introduces a **new algorithm for displaying UML diagrams*
      @enduml
      ```
 
-## Troubleshooting
+## If an error occurs
 
 - **Error: `ENOENT: no such file or directory, open 'temp.png'`**
   - **Cause**: PlantUML failed to generate `temp.png`, likely due to:
