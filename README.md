@@ -8,8 +8,7 @@ A web application that introduces a **new algorithm for displaying UML diagrams*
   - Verify: `node -v` and `npm -v`
 - **[Java 17 JRE or JDK](https://adoptium.net/)** for running PlantUML
   - Verify: `java -version` (should show version 17 or higher, e.g., `java version "17.0.9"`)
-- **PlantUML JAR file** (`plantuml-gplv2-1.2025.3.jar`)
-  - Download from [PlantUML](https://plantuml.com/en/download) and place in the project directory.
+
 
 ## Installation
 
