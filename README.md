@@ -11,11 +11,17 @@ A web application that introduces a **new algorithm for displaying UML diagrams*
 ## Installation
 
 1. 
+
+     ```bash
+   cd  C:\yourpath (
+   ```
+   were you save the file path like (cd C:\Users\Zord\Downloads\plantuml-viewer-1.0.0)
+2. 
    ```bash
    npm install
    ```
 
-2. Start the server:
+3. Start the server:
    ```bash
    node server.js
    ```
