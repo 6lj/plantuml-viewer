@@ -2,7 +2,7 @@
 
 A web application that introduces a **new algorithm for displaying UML diagrams** using PlantUML. This application allows users to input PlantUML code via a web interface, render it as a PNG image using a Node.js backend, and display the resulting diagram.
 
-## Prerequisites
+## Requires
 
 - **[Node.js](https://nodejs.org/)** (v18 or higher recommended)
   - Verify: `node -v` and `npm -v`
