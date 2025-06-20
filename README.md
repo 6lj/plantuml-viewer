@@ -74,7 +74,7 @@ A web application that introduces a **new algorithm for displaying UML diagrams*
   - **Java not recognized**: Add Java to PATH (e.g., `C:\Program Files\Java\jdk-17\bin`).
   - **Antivirus interference**: Temporarily disable antivirus to test file creation.
   - **Logs**: Check server logs in the terminal for detailed errors (e.g., `PlantUML execution error`).
-  - 
+  - X : m4ua If an error occurs, contact me. 
 
 
 ## Notes
