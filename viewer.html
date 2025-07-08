@@ -86,6 +86,108 @@
         .loading-message a:hover {
             color: #2bff00;
         }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #00ff2a;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .loading-text {
+            font-size: 16px;
+            color: #666;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .loading-dots {
+            display: inline-block;
+            width: 60px;
+            height: 20px;
+            position: relative;
+        }
+
+        .loading-dots::before,
+        .loading-dots::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #00ff2a;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .loading-dots::before {
+            left: 0;
+        }
+
+        .loading-dots::after {
+            left: 20px;
+            animation-delay: -0.32s;
+        }
+
+        .loading-dots {
+            background: #00ff2a;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+            animation-delay: -0.16s;
+            position: relative;
+            left: 40px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        @keyframes bounce {
+            0%, 80%, 100% { 
+                transform: scale(0);
+            } 40% { 
+                transform: scale(1.0);
+            }
+        }
+
+        .progress-bar {
+            width: 200px;
+            height: 4px;
+            background: #f3f3f3;
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff2a, #2bff00);
+            border-radius: 2px;
+            animation: progress 2s ease-in-out infinite;
+        }
+
+        @keyframes progress {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+        }
     </style>
 </head>
 <body>
@@ -115,13 +217,30 @@
         async function renderDiagram(plantuml) {
             const output = document.getElementById('output');
             const downloadBtn = document.getElementById('downloadBtn');
-            output.innerHTML = '<p>Loading...</p>';
+            output.innerHTML = `
+                <div class="loading-container">
+                    <div class="loading-spinner"></div>
+                    <div class="loading-text">Generating UML diagram...</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+            `;
             downloadBtn.disabled = true;
 
             
             const loadingTimeout = setTimeout(() => {
-                output.innerHTML = '<p class="loading-message">loading .. slow ? , Join <a href="https://prouml.q5.qa">ProUML</a></p>';
-            }, ); 
+                output.innerHTML = `
+                    <div class="loading-container">
+                        <div class="loading-spinner"></div>
+                        <div class="loading-text">Still processing... This is taking longer than usual</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                        <p class="loading-message">Need faster rendering? Try <a href="https://prouml.q5.qa">ProUML</a></p>
+                    </div>
+                `;
+            }, 3000); 
 
             try {
                 const response = await fetch('/render', {
