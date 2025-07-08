@@ -13,6 +13,7 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
+            justify-items: center; /* Center the grid item horizontally */
         }
 
         .glass-card {
@@ -26,6 +27,8 @@
             justify-content: space-between;
             align-items: center;
             overflow: hidden;
+            width: 100%; /* Ensure it takes full width of the grid cell */
+            max-width: 800px; /* Optional: limit max width for better appearance */
         }
 
         #output {
@@ -68,6 +71,21 @@
         .download-btn:hover:not(:disabled) {
             background: #2bff00;
         }
+
+        .loading-message {
+            color: var(--primary-red);
+            text-align: center;
+        }
+
+        .loading-message a {
+            color: #00ff2a;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .loading-message a:hover {
+            color: #2bff00;
+        }
     </style>
 </head>
 <body>
@@ -100,12 +118,18 @@
             output.innerHTML = '<p>Loading...</p>';
             downloadBtn.disabled = true;
 
+            
+            const loadingTimeout = setTimeout(() => {
+                output.innerHTML = '<p class="loading-message">slow ? , go to <a href="https://prouml.q5.qa">prouml</a></p>';
+            }, ); 
+
             try {
                 const response = await fetch('/render', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ plantuml })
                 });
+                clearTimeout(loadingTimeout); // Clear timeout if response is received
                 const data = await response.json();
                 if (data.error) {
                     output.innerHTML = `<p style="color: var(--primary-red);">Error: ${data.error}</p>`;
@@ -124,6 +148,7 @@
                     };
                 }
             } catch (error) {
+                clearTimeout(loadingTimeout); 
                 output.innerHTML = `<p style="color: var(--primary-red);">Network Error: ${error.message}</p>`;
                 downloadBtn.disabled = true;
             }
