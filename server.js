@@ -20,7 +20,7 @@ const { exec } = require('child_process');
 const fs = require('fs').promises;
 const path = require('path');
 const app = express();
-const port = 3000;
+const port = 4000;
 
 // Enable CORS with restricted origin
 app.use((req, res, next) => {
@@ -82,5 +82,5 @@ app.post('/render', async (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Server running at http://localhost:${3000}`);
+    console.log(`Server running at http://localhost:${4000}`);
 });
