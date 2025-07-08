@@ -2,14 +2,16 @@
   "name": "plantuml-viewer",
   "version": "1.1.0",
   "description": "A web application for rendering UML diagrams using PlantUML, with a Node.js backend and a simple HTML frontend",
-  "notes": "This package.json defines the PlantUML Viewer application. Use 'npm start' to run the server with Node.js, or 'npm run dev' for development with nodemon (auto-restarts on file changes). Dependencies include Express for the server. Ensure plantuml-gplv2-1.2025.3.jar is in the project directory for diagram rendering. Update the repository URL to your actual Git repo.",
+  "notes": "This package.json defines the PlantUML Viewer application. Use 'npm start' to run the server with Node.js, or 'npm run dev' for development with nodemon (auto-restarts on file changes). Dependencies include Express for the server, node-cache for caching, and axios for optional public PlantUML server integration. Ensure plantuml-gplv2-1.2025.3.jar is in the project directory for diagram rendering. Update the repository URL to your actual Git repo.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
   "dependencies": {
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "axios": "^1.7.7",
+    "node-cache": "^5.1.2"
   },
   "devDependencies": {
     "nodemon": "^3.1.7"
