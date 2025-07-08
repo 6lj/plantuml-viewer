@@ -5,6 +5,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UML Viewer</title>
     <link rel="stylesheet" href="https://q5.qa/styles2.css">
+    <style>
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        #output {
+            width: 100%;
+            max-height: 80vh;
+            overflow: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1.5px solid #ccc;
+            border-radius: 7.5px;
+            padding: 15px;
+        }
+
+        #output img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .download-btn {
+            width: 100%;
+            max-width: 200px;
+            padding: 10px;
+            background: #00ff2a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .download-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .download-btn:hover:not(:disabled) {
+            background: #2bff00;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -22,11 +86,19 @@
     </div>
 
     <script>
+        function debounce(func, wait) {
+            let timeout;
+            return function (...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+
         async function renderDiagram(plantuml) {
             const output = document.getElementById('output');
             const downloadBtn = document.getElementById('downloadBtn');
-            output.innerHTML = 'Show your UML'; 
-            downloadBtn.disabled = true; 
+            output.innerHTML = '<p>Loading...</p>';
+            downloadBtn.disabled = true;
 
             try {
                 const response = await fetch('/render', {
@@ -40,7 +112,7 @@
                     downloadBtn.disabled = true;
                 } else {
                     output.innerHTML = `<img src="data:image/png;base64,${data.image}" alt="UML Diagram" />`;
-                    downloadBtn.disabled = false; 
+                    downloadBtn.disabled = false;
                     downloadBtn.onclick = () => {
                         const img = output.querySelector('img');
                         if (img) {
@@ -57,11 +129,13 @@
             }
         }
 
+        const renderDiagramDebounced = debounce(renderDiagram, 500);
+
         window.addEventListener('load', () => {
             const params = new URLSearchParams(window.location.search);
             const code = params.get('code');
             if (code) {
-                renderDiagram(decodeURIComponent(code)); 
+                renderDiagramDebounced(decodeURIComponent(code));
             } else {
                 document.getElementById('output').innerHTML = '<p>No UML code provided</p>';
                 document.getElementById('downloadBtn').disabled = true;
