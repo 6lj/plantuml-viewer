@@ -20,11 +20,11 @@ const { exec } = require('child_process');
 const fs = require('fs').promises;
 const path = require('path');
 const app = express();
-const port = 4000;
+const port = 3000;
 
-// Enable CORS with restricted origin
+// Enable CORS
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'https://your-service-name.onrender.com'); // Replace with your Render frontend URL
+    res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
     res.header('Access-Control-Allow-Methods', 'POST');
     next();
@@ -53,8 +53,8 @@ app.post('/render', async (req, res) => {
         const tempOutputFile = path.join(__dirname, 'temp.png');
         await fs.writeFile(tempInputFile, plantuml);
 
-        // Execute PlantUML JAR to generate PNG with memory optimization and security profile
-        const command = `java -Xmx1024m -DPLANTUML_SECURITY_PROFILE=INTERNET -jar plantuml-gplv2-1.2025.3.jar -tpng ${tempInputFile} -o ${__dirname}`;
+        // Execute PlantUML JAR to generate PNG
+        const command = `java -jar plantuml-gplv2-1.2025.3.jar -tpng ${tempInputFile} -o ${__dirname}`;
         await new Promise((resolve, reject) => {
             exec(command, (error, stdout, stderr) => {
                 if (error) {
@@ -82,5 +82,5 @@ app.post('/render', async (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Server running at http://localhost:${4000}`);
+    console.log(`Server running at http://localhost:${port}`);
 });
