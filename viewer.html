@@ -13,7 +13,7 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            justify-items: center; /* Center the grid item horizontally */
+            justify-items: center; 
         }
 
         .glass-card {
@@ -27,8 +27,8 @@
             justify-content: space-between;
             align-items: center;
             overflow: hidden;
-            width: 100%; /* Ensure it takes full width of the grid cell */
-            max-width: 800px; /* Optional: limit max width for better appearance */
+            width: 100%; 
+            max-width: 800px;
         }
 
         #output {
@@ -120,7 +120,7 @@
 
             
             const loadingTimeout = setTimeout(() => {
-                output.innerHTML = '<p class="loading-message">slow ? , go to <a href="https://prouml.q5.qa">prouml</a></p>';
+                output.innerHTML = '<p class="loading-message">loading .. slow ? , go to <a href="https://prouml.q5.qa">ProUML</a></p>';
             }, ); 
 
             try {
@@ -129,7 +129,7 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ plantuml })
                 });
-                clearTimeout(loadingTimeout); // Clear timeout if response is received
+                clearTimeout(loadingTimeout);
                 const data = await response.json();
                 if (data.error) {
                     output.innerHTML = `<p style="color: var(--primary-red);">Error: ${data.error}</p>`;
